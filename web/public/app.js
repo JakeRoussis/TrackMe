@@ -1,5 +1,7 @@
-const devices = JSON.parse(localStorage.getItem('devices')) || [];
+$('#navbar').load('navbar.html');
+$('#footer').load('footer.html');
 
+const devices = JSON.parse(localStorage.getItem('devices')) || [];
 devices.forEach(function (device) {
     $('#devices tbody').append(`
  <tr>
