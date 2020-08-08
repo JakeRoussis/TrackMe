@@ -1,7 +1,7 @@
 $("#navbar").load("navbar.html");
 $("#footer").load("footer.html");
 
-const API_URL = "https://vercel.com/jakeroussis/trackme/1j84itomc/api";
+const API_URL = "https://trackme.jakeroussis.vercel.app/api";
 // const API_URL = "http://localhost:5000/api";
 const response = $.get("http://localhost:3001/devices");
 const currentUser = localStorage.getItem("user");
