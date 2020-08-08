@@ -1,17 +1,17 @@
 const mongoose = require('mongoose');
-mongoose.connect(process.env.MONGO_URL, {
+mongoose.connect("mongodb+srv://Jake:sit209db@cluster0.nf7wt.mongodb.net", {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
 
 const express = require("express");
 const bodyParser = require('body-parser');
-const app = express();
 const port = process.env.PORT || 5000;
 
 const Device = require('./models/device');
 const User = require('./models/user');
 
+const app = express();
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(function (req, res, next) {
