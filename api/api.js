@@ -14,9 +14,10 @@ const User = require('./models/user');
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-app.use(function (req, res, next) {
+app.use(express.static('public'));
+app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Headers", "Origin, X-RequestedWith, Content-Type, Accept");
     next();
 });
 
@@ -82,13 +83,9 @@ app.get('/api/devices', (req, res) => {
     });
 });
 
-app.post('/api/send-command', (req, res) => {
-    console.log(req.body);
-});
-
 app.post('/api/authenticate', (req, res) => {
     const { name, password } = req.body;
-    User.findOne({ "name":name }, (err, found) => {
+    User.findOne({ "name": name }, (err, found) => {
         if (err) {
             return res.send(err);
         }
@@ -110,7 +107,7 @@ app.post('/api/authenticate', (req, res) => {
 
 app.post('/api/registration', (req, res) => {
     const { name, password, isAdmin } = req.body;
-    User.findOne({"name":name}, (err, found) => {
+    User.findOne({ "name": name }, (err, found) => {
         if (err) {
             return res.send(err);
         }

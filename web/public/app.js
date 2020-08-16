@@ -1,8 +1,8 @@
 $("#navbar").load("navbar.html");
 $("#footer").load("footer.html");
 
+const MQTT_URL = 'http://localhost:5001/send-command';
 const API_URL = "https://trackme.jakeroussis.vercel.app/api";
-// const API_URL = "http://localhost:5000/api";
 const response = $.get("http://localhost:3001/devices");
 const currentUser = localStorage.getItem("user");
 console.log(response);
@@ -24,9 +24,9 @@ if (currentUser) {
             $('#devices tbody tr').on('click', (e) => {
                 const deviceId = e.currentTarget.getAttribute('data-device-id');
                 $.get(`${API_URL}/devices/${deviceId}/device-history`)
-                .then(response => {
-                    response.map(sensorData => {
-                        $('#historyContent').append(`
+                    .then(response => {
+                        response.map(sensorData => {
+                            $('#historyContent').append(`
                         <tr>
                             <td>${sensorData.ts}</td>
                             <td>${sensorData.temp}</td>
@@ -34,9 +34,9 @@ if (currentUser) {
                             <td>${sensorData.loc.lon}</td>
                         </tr>
                     `);
+                        });
+                        $('#historyModal').modal('show');
                     });
-                    $('#historyModal').modal('show');
-                });
             });
         })
         .catch((error) => {
@@ -93,6 +93,9 @@ $("#add-device").on("click", () => {
 
 $("#send-command").on("click", function () {
     const command = $("#command").val();
+    const deviceID = $('#deviceID').val();
+
+    $.post(MQTT_URL, { command, deviceID });
     console.log(`command is: ${command}`);
 });
 
@@ -114,7 +117,7 @@ $("#register").on("click", function () {
             if (response.success) {
                 location.href = '/login';
             } else {
-                $('#alert').append(`<p class="alert alert-danger">${response}</p>`); 
+                $('#alert').append(`<p class="alert alert-danger">${response}</p>`);
             }
         });
     }
@@ -123,7 +126,7 @@ $("#register").on("click", function () {
 $("#login").on("click", function () {
     const username = $("#username").val();
     const password = $("#password").val();
-    $.post(`${API_URL}/authenticate`, { "name":username, "password":password }).then((response) => {
+    $.post(`${API_URL}/authenticate`, { "name": username, "password": password }).then((response) => {
         if (response.success) {
             localStorage.setItem("user", username);
             localStorage.setItem("isAdmin", response.isAdmin);
